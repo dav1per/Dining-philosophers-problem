@@ -1,5 +1,6 @@
 from threading import Thread, Lock
 import time
+import random
 
 
 number_of_philosophers = 5
@@ -30,6 +31,7 @@ def philosopher_eat(i):
         chopsticks[i].release()
         time.sleep(1)
         chopsticks[i - 1].release()
+        
 
 
 
@@ -37,12 +39,16 @@ def philosopher_eat(i):
 
 threads = []
 for i in range(5):
-    threads.append(Thread(target=philosopher_eat, args=(i + 1,)))
+    threads.append(Thread(target=philosopher_eat, args=(i + 1, )))
 
 
-for thread in threads:
-    thread.start()
-
+number_of_meals = 3
+while(number_of_meals > 0):
+    time.sleep(random.randint(1, 3))
+    i = random.randint(0, 4)
+    if not threads[i].is_alive():
+        threads[i].start()
+        number_of_meals -= 1
 
 
 
